@@ -28,3 +28,34 @@
 .MMM-UFO .summary {
   color: white;               /* Color possible summary. Default is white. */
 }
+
+.horizontalList {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+
+.AlbumName 
+{
+  margin: 0;
+  margin-left: 5px;
+  margin-right: 5px;
+  float: left;
+}
+
+.AlbumType
+{
+  float: left;
+}
+
+.AlbumCard
+{
+  margin: 5px;
+}
+
+.Artist {
+  margin-left: 10px;
+  float: left;
+}

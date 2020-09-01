@@ -26,11 +26,13 @@ Module.register("MMM-SpotifyReleases", {
 
         this.artists = ["7AGSJihqYPhYy5QzMcwcQT", "0caJEGgVuXuSHhhrMCmlkI"];
         this.allAlbums = {};
-        this.accessToken = "";
+        this.accessToken = "BQCKOSgIOKAOqQ33hhdALGagPfb4gWmaa4qWOX1vNK8Zox3rEojZ0iqtyoCINwpNw3V7lKroZV4y0Oh80a10Wc0XiTi9D55o2jtqm0Fwnq82sdLKV72d3qcBn8j6bS8HamAyEZArCO7wy1Q";
         this.market = "NL";
         this.maxAlbumsPerRequest = "5";
         this.visibleReleases = 5;
-        this.url = "https://api.spotify.com/v1/artists/" + "7AGSJihqYPhYy5QzMcwcQT"+ "/albums?market=" + this.market + "&limit=" + this.maxAlbumsPerRequest;
+        this.client_id = "11fb058c676f44e4bce48b554675891a";
+        this.client_secret = "0da5127af693432aad40932738590209";
+        this.auth_url = "https://accounts.spotify.com/api/token";
         this.url_start = "https://api.spotify.com/v1/artists/";
         this.url_end = "/albums?market=" + this.market + "&limit=" + this.maxAlbumsPerRequest;
         this.scheduleUpdate();
@@ -124,6 +126,7 @@ Module.register("MMM-SpotifyReleases", {
         setInterval(() => {
             this.getRecentAlbums();
         }, this.config.updateInterval);
+        this.authorizeClient();
         this.getRecentAlbums();
         var self = this;
     },
@@ -162,5 +165,51 @@ Module.register("MMM-SpotifyReleases", {
             this.updateDom(this.config.animationSpeed);
         }, 1000);
     },
+
+    getAccessKey: function()
+    {
+        var url = this.auth_url;
+        var req = new XMLHttpRequest()
+        req.overrideMimeType("application/json")
+        req.open('POST', url, true)
+        console.log((this.client_id + ':' + this.client_secret).toString('base64'))
+
+        req.setRequestHeader("Authorization", 'Basic ' + (this.client_id + ':' + this.client_secret).toString('base64'));
+
+        var params = {
+            grant_type: "authorization_code",
+        };
+
+        req.onload  = () => {
+            var jsonResult = req.responseText;
+            console.log("RESUULLLTTTT!!");
+            console.log(jsonResult);
+        }
+        req.send(JSON.stringify(data));
+    },
+
+    authorizeClient: function()
+    {
+        var url = "https://accounts.spotify.com/authorize";
+        var req = new XMLHttpRequest()
+        req.overrideMimeType("application/json")
+        req.open('GET', url, true)
+
+        //req.setRequestHeader('Access-Control-Allow-Origin', 'https://accounts.spotify.com/authorize');
+
+        var params = {
+            client_id: this.client_id,
+            response_type: "code",
+            redirect_uri: "http://192.168.178.80:8080",
+        }
+
+        req.onload  = () => {
+            var jsonResult = req.responseText;
+            console.log("AUTHORIZEDDD!!!!!!");
+            console.log(jsonResult);
+        }
+
+        req.send(JSON.stringify(params));
+    }
 
 });

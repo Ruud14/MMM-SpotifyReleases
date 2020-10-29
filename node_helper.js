@@ -6,6 +6,7 @@
  */
 const NodeHelper = require('node_helper');
 const request = require('request');
+const SpotifyConnector = require('./SpotifyConnector');
 
 
 
@@ -13,40 +14,37 @@ module.exports = NodeHelper.create({
 
     start: function() {
         console.log("Starting node_helper for: " + this.name);
+        this.connector = undefined;
     },
 
 
-    getData: function(payload) {
-        var url = payload.url;
-        var accessToken = payload.accessToken;
-        var artists = payload.artists;
-        var allAlbums = [];
-        for(const artist_i in artists)
-        {
-            request({
-                url: url,
-                method: 'GET',
-                headers: {"Accept": "application/json", "Content-Type": "application/json", "Authorization": "Bearer " + accessToken}
-            }, (error, response, body) => {
-                if (!error && response.statusCode == 200) {
-                    var result = JSON.parse(body);
-                    this.allAlbums.push(...result.items) 
-                    this.sendSocketNotification('DATA_RESULT', allAlbums);
-                }
-                else
-                {
-                    this.sendSocketNotification('DATA_RESULT', {'error': error, 'response':response});
-                }
-            });
+    socketNotificationReceived: function (notification, payload) {
+        switch (notification) {
+          case 'CONNECT_TO_SPOTIFY':
+            this.connector = new SpotifyConnector(payload);
+            this.retrieveCurrentSong();
+            break;
+    
+          case 'UPDATE_CURRENT_SONG':
+            this.retrieveCurrentSong();
+            break;
         }
+      },
 
-        //setTimeout(() => { this.sendSocketNotification('DATA_RESULT', allAlbums); }, 1000);
 
+    retrieveCurrentSong: function () {
+    this.connector.retrieveCurrentlyPlaying()
+        .then((response) => {
+        if (response) {
+            this.sendSocketNotification('RETRIEVED_SONG_DATA', response);
+        } else {
+            this.sendSocketNotification('RETRIEVED_SONG_DATA', "FAILED!!!");
+        }
+        })
+        .catch((error) => {
+        console.error('Can’t retrieve current song. Reason: ');
+        console.error(error);
+        });
     },
-
-    socketNotificationReceived: function(notification, payload) {
-        if (notification === 'GET_DATA') {
-            this.getData(payload);
-        }
-    }
+    
 });

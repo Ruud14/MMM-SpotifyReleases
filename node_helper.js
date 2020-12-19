@@ -22,23 +22,23 @@ module.exports = NodeHelper.create({
         switch (notification) {
           case 'CONNECT_TO_SPOTIFY':
             this.connector = new SpotifyConnector(payload);
-            this.retrieveCurrentSong();
+            this.retrieveLatestReleases();
             break;
     
           case 'UPDATE_CURRENT_SONG':
-            this.retrieveCurrentSong();
+            this.retrieveLatestReleases();
             break;
         }
       },
 
 
-    retrieveCurrentSong: function () {
-    this.connector.retrieveCurrentlyPlaying()
+      retrieveLatestReleases: function () {
+    this.connector.retrieveReleases()
         .then((response) => {
         if (response) {
             this.sendSocketNotification('RETRIEVED_SONG_DATA', response);
         } else {
-            this.sendSocketNotification('RETRIEVED_SONG_DATA', "FAILED!!!");
+            this.sendSocketNotification('RETRIEVED_SONG_DATA', "FAILED!");
         }
         })
         .catch((error) => {

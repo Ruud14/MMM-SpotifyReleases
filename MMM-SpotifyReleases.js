@@ -27,25 +27,25 @@ Module.register("MMM-SpotifyReleases", {
         this.artists = ["7AGSJihqYPhYy5QzMcwcQT", "0caJEGgVuXuSHhhrMCmlkI"];
         this.allAlbums = {};
         this.accessToken = "BQBse8ey6bG5qSHrLX4z2QXUtw6cxYmhyBguD6RfYYAVqSdWKzVF8uO9RLXmgYg6nLrLOOR3c_QGAeLxVfMDwIF0Q4fuRi25jMepFyx83Aq7RYcTQG-2rbaCNjxd-NCbVjsgL-6Ee85V2wR-lX8G-Br2ct_sgqZdEJo";
-        this.refreshToken = "AQBg9Qz_gwTNCvY9ZL6OcztbhthUMYLtJPR1anvHe9OMgDgNCfyP1mOUZQYmpDPjJ8MY2oM8pzsqlIMN6ZhIg2aDESFtrR0_iymdeE7zDg9kg3NIc5vmMMO2390kxX-yYBE"
-        this.market = "NL";
-        this.maxAlbumsPerRequest = "5";
+        this.refreshToken = "AQBg9Qz_gwTNCvY9ZL6OcztbhthUMYLtJPR1anvHe9OMgDgNCfyP1mOUZQYmpDPjJ8MY2oM8pzsqlIMN6ZhIg2aDESFtrR0_iymdeE7zDg9kg3NIc5vmMMO2390kxX-yYBE";
+
         this.visibleReleases = 5;
         this.client_id = "11fb058c676f44e4bce48b554675891a";
         this.client_secret = "0da5127af693432aad40932738590209";
-        this.auth_url = "https://accounts.spotify.com/api/token";
-        this.url_start = "https://api.spotify.com/v1/artists/";
-        this.url_end = "/albums?market=" + this.market + "&limit=" + this.maxAlbumsPerRequest;
 
-
-        let credentials = {
+        this.credentials = {
             clientID: this.client_id,
             clientSecret: this.client_secret,
             accessToken: this.accessToken,
             refreshToken: this.refreshToken,
         };
+
+        this.socketSendData = {
+            credentials: this.credentials,
+            artists: this.artists,
+        }
       
-        this.sendSocketNotification('CONNECT_TO_SPOTIFY', credentials);
+        this.sendSocketNotification('CONNECT_TO_SPOTIFY', this.socketSendData);
       
         this.scheduleUpdate();
     },
@@ -78,7 +78,7 @@ Module.register("MMM-SpotifyReleases", {
         // Sort all albums by releasedate.
         var sortedAlbumList = Object.values(this.allAlbums);
         sortedAlbumList = sortedAlbumList.sort((a, b) => (parseInt(b.release_date.split("-").join("")) - parseInt(a.release_date.split("-").join(""))))
-
+        
         // Show the most recent albums.
         for(const album_i in sortedAlbumList.slice(0, this.visibleReleases))
         {
@@ -136,52 +136,24 @@ Module.register("MMM-SpotifyReleases", {
     // Schedules the refreshing of the recent releases.
     scheduleUpdate: function() { 
         setInterval(() => {
-            this.getRecentAlbums();
+            this.sendSocketNotification('UPDATE_RELEASES', this.socketSendData);
         }, this.config.updateInterval);
         //this.authorizeClient();
-        this.getRecentAlbums();
+        this.sendSocketNotification('UPDATE_RELEASES', this.socketSendData);
         var self = this;
-    },
-
-    // Get the most recent albums of the specified artist.
-    getAlbumsOfArtist: function(artistID)
-    {
-        var url = this.url_start + artistID + this.url_end;
-        var accessToken = this.accessToken;
-        var allAlbums = [];
-        var req = new XMLHttpRequest()
-        req.overrideMimeType("application/json")
-        req.open('GET', url, true)
-        req.setRequestHeader("Accept", "application/json");
-        req.setRequestHeader("Content-Type", "application/json");
-        req.setRequestHeader("Authorization", "Bearer " + accessToken);
-        req.onload  = () => {
-            var jsonResult = JSON.parse(req.responseText)
-            for(const album_i in jsonResult.items)
-            {
-                this.allAlbums[jsonResult.items[album_i].uri] = jsonResult.items[album_i];
-            }
-        }
-        req.send();
-    },
-
-    // Get all the recent albums.
-    getRecentAlbums : function()
-    {
-        for(const artist_i in this.artists)
-        {
-            this.getAlbumsOfArtist(this.artists[artist_i]);
-        }
-        setTimeout(() => {
-            this.loaded = true;
-            this.updateDom(this.config.animationSpeed);
-        }, 1000);
     },
 
     socketNotificationReceived: function (notification, payload) {
         switch (notification) {
           case 'RETRIEVED_SONG_DATA':
             console.log("RECEIVED MESSAGE FROM NODE_HELPER:"+payload.toString());
+            if(payload !== "FAILED!")
+            {
+                this.allAlbums = payload;
+                console.log(this.allAlbums);
+                this.updateDom(this.config.animationSpeed);
+                this.loaded = true;
+            }
         }
       },
 });

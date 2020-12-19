@@ -2,17 +2,12 @@ Module.register("MMM-SpotifyReleases", {
 
     // Module config defaults.
     defaults: {
-		city: "New York",
-		state: "NY",
         useHeader: true, // false if you don't want a header
         header: "New releases of your favorite artists!", // Any text you want
-        maxWidth: "400px",
-        rotateInterval: 30 * 1000,
+        maxWidth: "500px",
         animationSpeed: 3000, // fade in and out speed
-        initialLoadDelay: 4250,
-        retryDelay: 2500,
         updateInterval: 60 * 60 * 1000,
-
+        visibleReleasesAmount: 5,
     },
 
     getStyles: function() {
@@ -24,15 +19,19 @@ Module.register("MMM-SpotifyReleases", {
 
         requiresVersion: "2.1.0",
 
-        this.artists = ["7AGSJihqYPhYy5QzMcwcQT", "0caJEGgVuXuSHhhrMCmlkI"];
+        // Get data from config file.
+        this.accessToken = this.config.accessToken;
+        this.refreshToken = this.config.refreshToken;
+        this.client_id = this.config.clientID;
+        this.client_secret = this.config.clientSecret;
+        this.artists = this.config.artists;
+        this.visibleReleasesAmount = this.config.visibleReleasesAmount;
+
+        // List of all albums. 
+        // This list is populated after a succesfull spotify api request.
         this.allAlbums = {};
-        this.accessToken = "BQBse8ey6bG5qSHrLX4z2QXUtw6cxYmhyBguD6RfYYAVqSdWKzVF8uO9RLXmgYg6nLrLOOR3c_QGAeLxVfMDwIF0Q4fuRi25jMepFyx83Aq7RYcTQG-2rbaCNjxd-NCbVjsgL-6Ee85V2wR-lX8G-Br2ct_sgqZdEJo";
-        this.refreshToken = "AQBg9Qz_gwTNCvY9ZL6OcztbhthUMYLtJPR1anvHe9OMgDgNCfyP1mOUZQYmpDPjJ8MY2oM8pzsqlIMN6ZhIg2aDESFtrR0_iymdeE7zDg9kg3NIc5vmMMO2390kxX-yYBE";
 
-        this.visibleReleases = 5;
-        this.client_id = "11fb058c676f44e4bce48b554675891a";
-        this.client_secret = "0da5127af693432aad40932738590209";
-
+        // put the data in the right format for the socket communation
         this.credentials = {
             clientID: this.client_id,
             clientSecret: this.client_secret,
@@ -40,13 +39,15 @@ Module.register("MMM-SpotifyReleases", {
             refreshToken: this.refreshToken,
         };
 
+
         this.socketSendData = {
             credentials: this.credentials,
             artists: this.artists,
         }
       
+        // Setup the spotify connector.
         this.sendSocketNotification('CONNECT_TO_SPOTIFY', this.socketSendData);
-      
+
         this.scheduleUpdate();
     },
 
@@ -80,7 +81,7 @@ Module.register("MMM-SpotifyReleases", {
         sortedAlbumList = sortedAlbumList.sort((a, b) => (parseInt(b.release_date.split("-").join("")) - parseInt(a.release_date.split("-").join(""))))
         
         // Show the most recent albums.
-        for(const album_i in sortedAlbumList.slice(0, this.visibleReleases))
+        for(const album_i in sortedAlbumList.slice(0, this.visibleReleasesAmount))
         {
             var album = sortedAlbumList[album_i];
 
@@ -137,6 +138,7 @@ Module.register("MMM-SpotifyReleases", {
     scheduleUpdate: function() { 
         setInterval(() => {
             this.sendSocketNotification('UPDATE_RELEASES', this.socketSendData);
+            this.updateDom(this.config.animationSpeed);
         }, this.config.updateInterval);
         //this.authorizeClient();
         this.sendSocketNotification('UPDATE_RELEASES', this.socketSendData);
@@ -146,14 +148,15 @@ Module.register("MMM-SpotifyReleases", {
     socketNotificationReceived: function (notification, payload) {
         switch (notification) {
           case 'RETRIEVED_SONG_DATA':
-            console.log("RECEIVED MESSAGE FROM NODE_HELPER:"+payload.toString());
             if(payload !== "FAILED!")
             {
+                console.log("Got new data.");
+                // Replace the currently showed albums with the new ones.
                 this.allAlbums = payload;
-                console.log(this.allAlbums);
                 this.updateDom(this.config.animationSpeed);
                 this.loaded = true;
             }
         }
+        this.updateDom(this.config.animationSpeed);
       },
 });

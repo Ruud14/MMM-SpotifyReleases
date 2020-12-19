@@ -30,21 +30,19 @@ module.exports = NodeHelper.create({
             break;
         }
       },
-
-
       retrieveLatestReleases: function () {
-    this.connector.retrieveReleases()
-        .then((response) => {
-        if (response) {
-            this.sendSocketNotification('RETRIEVED_SONG_DATA', response);
-        } else {
-            this.sendSocketNotification('RETRIEVED_SONG_DATA', "FAILED!");
-        }
-        })
-        .catch((error) => {
-        console.error('Can’t retrieve current song. Reason: ');
-        console.error(error);
-        });
-    },
+        this.connector.retrieveReleases()
+          .then((response) => {
+          if (response) {
+              this.sendSocketNotification('RETRIEVED_SONG_DATA', response);
+          } else {
+              this.sendSocketNotification('RETRIEVED_SONG_DATA', "FAILED!");
+          }
+          })
+          .catch((error) => {
+          console.error('Can’t retrieve current song. Reason: ');
+          console.error(error);
+          });
+      },
     
 });

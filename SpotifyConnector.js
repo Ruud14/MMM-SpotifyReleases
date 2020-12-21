@@ -83,7 +83,19 @@ module.exports = class SpotifyConnector {
         var albums = await this.getAlbumsOfArtist(artistID, accessToken);
         for(const album of albums)
         {
-          allAlbums[album.uri] = album;
+          // Filter duplicate albums. idk why Spotify sometimes returns the same album twice with different IDs...
+          var alreadyIn = false;
+          for(const duplAlbum of Object.values(allAlbums))
+          {
+            if((duplAlbum.name === album.name) && (duplAlbum.release_date === album.release_date))
+            {
+              alreadyIn = true;
+            }
+          }
+          if(alreadyIn === false)
+          {
+            allAlbums[album.uri] = album;
+          }
         }
     }
     return allAlbums;

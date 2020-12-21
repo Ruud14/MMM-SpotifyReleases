@@ -7,13 +7,51 @@
 
   <body>
     <center>
+      <script>
+        var url = window.location.href;
+        if((url.includes("access_token=")) && (url.includes("access_token=")))
+        {
+          var access_token = url.split("&")[0].split("=")[1];
+          var refresh_token = url.split("&")[1].split("=")[1];
+
+          var center_elem = document.createElement("center");
+
+          var a = document.createElement("H4");
+          var b = document.createTextNode("Access token: "+access_token); 
+          a.appendChild(b); 
+
+          var c = document.createElement("H4");
+          var d = document.createTextNode("Refresh token: "+refresh_token); 
+          c.appendChild(d); 
+
+          center_elem.appendChild(a);
+          center_elem.appendChild(c);
+          document.body.appendChild(center_elem);
+
+        }
+      </script>
+      <script>
+        function loginFunc() {
+          var client_id = document.getElementById("client_id_input").value;
+          var client_secret = document.getElementById("client_secret_input").value;
+          if((client_id !== "") && (client_secret !== ""))
+          {
+            window.location.href = "/login/"+client_id+"/"+client_secret;
+          }
+          else
+          {
+            alert("Make sure both input fields are filled in.")
+          }
+        }
+      </script>
+
       <H3>Client ID:</H3>
       <input type="text" id="client_id_input"><br>
       <H3>Client Secret:</H3>
       <input type="text" id="client_secret_input"><br>
       <br>
-      <a href="/login" class="btn btn-primary">Generate Access and Refresh token.</a>
-    </center>>
+      <a onclick="loginFunc()" class="btn btn-primary">Generate Access and Refresh token.</a>
+    </center>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>

@@ -1,0 +1,22 @@
+{
+  "name": "mmm-spotifyreleases",
+  "version": "1.0.0",
+  "description": "MM module to display the recent releases of your favorite artists.",
+  "main": "MMM-SpotifyReleases.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ruud14/MMM-SpotifyReleases.git"
+  },
+  "keywords": [
+    "spotify"
+  ],
+  "author": "github.com/Ruud14",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ruud14/MMM-SpotifyReleases/issues"
+  },
+  "homepage": "https://github.com/Ruud14/MMM-SpotifyReleases#readme"
+}

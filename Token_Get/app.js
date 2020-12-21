@@ -3,9 +3,10 @@ var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
-var client_id = '11fb058c676f44e4bce48b554675891a'; // Your client id
-var client_secret = '0da5127af693432aad40932738590209'; // Your secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+var redirect_uri = undefined;
+
+var client_id = undefined;
+var client_secret = undefined;
 
 // Generates a random string containing numbers and letters
 var generateRandomString = function(length) {
@@ -25,10 +26,17 @@ var app = express();
 app.use(express.static(__dirname))
    .use(cookieParser());
 
-app.get('/login', function(req, res) {
+app.get('/login/:client_id/:client_secret', function(req, res) {
 
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
+
+
+  redirect_uri = res.req.headers['referer']+"callback";
+  console.log(redirect_uri);
+
+  client_id = req.params["client_id"];
+  client_secret = req.params["client_secret"];
 
   // your application requests authorization
   var scope = 'user-read-private user-read-email user-top-read';

@@ -1,6 +1,7 @@
 # MMM-SpotifyReleases
 
 <br>
+
 **A MagicMirror Module that displays recent releases of your favorite Spotify artists.**
 <br>
 
@@ -22,6 +23,7 @@ cd MMM-SpotifyReleases
 npm install
 ```
 <br>
+
 **2.**
 Register this module as an app in the [Spotify developer area](https://developer.spotify.com/dashboard/applications).
 Complete the following steps to do so:
@@ -39,6 +41,7 @@ We will be needing those later.
 - Add the following URL to the 'Redirect URIs': <br> `http://<LOCAL IP OF MIRROR>:8888/callback` where `<LOCAL IP OF MIRROR>` should be replaced with the local IP address of your mirror.
 
 <br>
+
 **3.**
 Get your Spotify accessToken and refreshToken. <br>
 There are multiple ways of doing this, following the steps below is one of them: <br>
@@ -54,6 +57,7 @@ node app.js
 - Your **access token** and **refresh token** will be shown after logging in. We will be needing these in the next step.
 
 <br>
+
 **4.**
 Get the IDs of your favorite Spotify artists.
 - Go to the profile of the artist.
@@ -62,6 +66,7 @@ Get the IDs of your favorite Spotify artists.
 - Choose to copy the Spotify-URIs. You'll get something like this: `spotify:artist:246dkjvS1zLTtiykXe5h60`.
 - remove 'spotify:artist:' and what is left is the ID of the artist.
 <br>
+
 **5.**
 Put the following code into MagicMirror/config.js
 
@@ -104,6 +109,7 @@ Put the following code into MagicMirror/config.js
 | `artists`  |  Required `list` of `string`s<br>List of all the artist IDs. (From step 4) |
 
 <br>
+
 **Feel free to contact me [here](https://github.com/Ruud14/MMM-SpotifyReleases/issues) if you have any questions, problems, or feature requests.**
 <br>
 

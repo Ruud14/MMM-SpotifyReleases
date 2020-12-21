@@ -64,7 +64,7 @@ Get the IDs of your favorite Spotify artists.
 - Click the button with the three dots.
 - Click the share button.
 - Choose to copy the Spotify-URIs. You'll get something like this: `spotify:artist:246dkjvS1zLTtiykXe5h60`.
-- remove 'spotify:artist:' and what is left is the ID of the artist.
+- remove `spotify:artist:` and what is left is the ID of the artist.
 <br>
 
 **5.**

@@ -25,7 +25,7 @@ module.exports = NodeHelper.create({
             this.retrieveLatestReleases();
             break;
     
-          case 'UPDATE_CURRENT_SONG':
+          case 'UPDATE_RELEASES':
             this.retrieveLatestReleases();
             break;
         }

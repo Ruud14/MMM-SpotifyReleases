@@ -19,7 +19,11 @@ module.exports = class SpotifyConnector {
 
   retrieveReleases() {
     if (moment().isBefore(this.tokenExpiresAt)) {
-      return this.getSpotifyData("1");
+      return this.getAlbumsOfArtists(this.artists, this.credentials.accessToken)
+      .then((response2) =>
+      {
+        return response2;
+      })
 
     } else {
       return this.refreshAccessToken()

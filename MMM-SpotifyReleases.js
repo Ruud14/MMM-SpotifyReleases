@@ -139,6 +139,7 @@ Module.register("MMM-SpotifyReleases", {
         setInterval(() => {
             this.sendSocketNotification('UPDATE_RELEASES', this.socketSendData);
         }, this.config.updateInterval);
+    	this.sendSocketNotification('UPDATE_RELEASES', this.socketSendData);
         var self = this;
     },
 

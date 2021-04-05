@@ -3,7 +3,7 @@ Module.register("MMM-SpotifyReleases", {
     // Module config defaults.
     defaults: {
         useHeader: true, // false if you don't want a header
-        header: "New releases of your favorite artists!", // Any text you want
+        header: "New releases from your favorite artists!", // Any text you want
         maxWidth: "500px",
         animationSpeed: 3000, // fade in and out speed
         updateInterval: 60 * 60 * 1000,
@@ -60,7 +60,7 @@ Module.register("MMM-SpotifyReleases", {
 
         // Show loading text when the spotify api call hasn't been completed yet.
         if (!this.loaded) {
-            wrapper.innerHTML = "Loading new releases of your favorite artists...";
+            wrapper.innerHTML = "Loading new releases from your favorite artists...";
             wrapper.classList.add("bright", "light", "small");
             return wrapper;
         }

@@ -2,14 +2,14 @@
 
 <br>
 
-**A MagicMirror Module that displays recent releases of your favorite Spotify artists.**
+**A MagicMirror Module that displays recent releases from your favorite Spotify artists.**
 <br>
 
 
-![Image](https://i.ibb.co/7rFQkg3/image.png)
+![Image](https://i.ibb.co/yBLzs8t/image2.png)
 
 This module depends on the [Spotify API](https://developer.spotify.com/documentation/web-api/). To use this free API we'll be needing a Key. <br>
-Don't worry, it isn't difficult to get such a key, the steps below will show you.
+The steps below will show you how to get such a key.
 
 **How to install?**
 
@@ -59,12 +59,12 @@ node app.js
 <br>
 
 **4.**
-Get the IDs of your favorite Spotify artists.
-- Go to the profile of the artist.
+Get your favorite Spotify artist's IDs.
+- Go to artist's profile.
 - Click the button with the three dots.
 - Click the share button.
 - Choose to copy the Spotify-URIs. You'll get something like this: `spotify:artist:246dkjvS1zLTtiykXe5h60`.
-- remove `spotify:artist:` and what is left is the ID of the artist.
+- remove `spotify:artist:` and what is left is artist's ID.
 <br>
 
 **5.**
@@ -75,7 +75,7 @@ Put the following code into MagicMirror/config.js
     module: 'MMM-SpotifyReleases',
     position: "bottom_left",
     config: {
-        header: "New releases of your favorite artists!",
+        header: "New releases from your favorite artists!",
         useHeader: true,
         animationSpeed: 3000,
         updateInterval: 60 * 60 * 1000,
@@ -96,7 +96,7 @@ Put the following code into MagicMirror/config.js
 
 | Option  |  Description  |
 |---|---|
-| `header`  |  Optional `string`<br>The text above the list of releases (See image). |
+| `header`  |  Optional `string`<br>The text above the list with releases (See image). |
 | `useHeader`  |  Optional `boolean`<br>Whether the header is shown or not. |
 | `animationSpeed`  |  Optional `integer`<br>Fade in and out speed. (in ms) |
 | `updateInterval`  |  Optional `integer`<br>Time between Spotify API calls. (in ms) |
@@ -112,11 +112,6 @@ Put the following code into MagicMirror/config.js
 
 **Feel free to contact me [here](https://github.com/Ruud14/MMM-SpotifyReleases/issues) if you have any questions, problems, or feature requests.**
 <br>
-
-**What I learned:**
-- Working with Node.
-- Creating a MagicMirror module.
-
 
 
 

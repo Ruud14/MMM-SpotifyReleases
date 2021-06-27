@@ -44,7 +44,6 @@ Module.register("MMM-SpotifyReleases", {
             credentials: this.credentials,
             artists: this.artists,
         }
-      
         // Setup the spotify connector.
         this.sendSocketNotification('CONNECT_TO_SPOTIFY', this.socketSendData);
 
@@ -97,9 +96,21 @@ Module.register("MMM-SpotifyReleases", {
             var releaseDate = new Date(album.release_date);
             var today = new Date();
             const diffTime = Math.abs(today - releaseDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-        
-            releaseDate_elem.innerText = diffDays.toString() + " days ago";
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            var releaseDateText = "";
+            if(diffDays === 0)
+                {
+                    releaseDateText = "Today";
+                }
+            else if(diffDays === 1)
+                {
+                    releaseDateText = "Yesterday";
+                }
+            else
+                {
+                    releaseDateText = diffDays.toString() + " days ago.";
+                }
+            releaseDate_elem.innerText = releaseDateText;
             top_list.appendChild(releaseDate_elem);
             // Album type.
             var albumType_elem = document.createElement("h10");

@@ -159,7 +159,6 @@ Module.register("MMM-SpotifyReleases", {
           case 'RETRIEVED_SONG_DATA':
             if(payload !== "FAILED!")
             {
-                console.log("Got new data.");
                 // Replace the currently showed albums with the new ones.
                 this.allAlbums = payload;
                 this.updateDom(this.config.animationSpeed);

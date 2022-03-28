@@ -1,14 +1,7 @@
-/* Magic Mirror
- * Module: MMM-UFO
- *
- * By Mykle1
- *
- */
+
 const NodeHelper = require('node_helper');
 const request = require('request');
 const SpotifyConnector = require('./SpotifyConnector');
-
-
 
 module.exports = NodeHelper.create({
 

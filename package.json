@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/Ruud14/MMM-SpotifyReleases/issues"
   },
-  "homepage": "https://github.com/Ruud14/MMM-SpotifyReleases#readme"
+  "homepage": "https://github.com/Ruud14/MMM-SpotifyReleases#readme",
+  "dependencies": {
+    "request": "latest",
+    "request-promise-native": "latest",
+    "moment" : "latest",
+    "xhr2" : "latest"
+  }
+
 }
